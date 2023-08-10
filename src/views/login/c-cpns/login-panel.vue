@@ -25,7 +25,7 @@
               <span class="text">手机登录</span>
             </div>
           </template>
-          <pane-phone />
+          <pane-phone ref="mobileRef"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -53,13 +53,17 @@ import PanePhone from './pane-phone.vue'
 
 const activeName = ref('account')
 const isRemPwd = ref(false)
+
+// 组件实例
+const mobileRef = ref<InstanceType<typeof PanePhone>>()
 const accountRef = ref<InstanceType<typeof PaneAccount>>()
 
 function handleLoginBtnClick() {
   if (activeName.value === 'account') {
     accountRef.value?.loginAction()
   } else {
-    console.log('用户在进行手机登录')
+    console.log('用户在进行手机登录', mobileRef)
+    mobileRef.value?.loginAction()
   }
 }
 </script>

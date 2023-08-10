@@ -3,7 +3,7 @@
     <el-form
       :model="account"
       :rules="accountRules"
-      label-width="60px"
+      label-width="65px"
       size="large"
       status-icon
       ref="formRef"
@@ -36,7 +36,7 @@ const accountRules: FormRules = {
   name: [
     { required: true, message: '必须输入帐号信息~', trigger: 'blur' },
     {
-      pattern: /^[a-z0-9]{6,20}$/,
+      pattern: /^[a-zA-Z0-9]{6,20}$/,
       message: '必须是6~20数字或字母组成~',
       trigger: 'blur'
     }
@@ -44,7 +44,7 @@ const accountRules: FormRules = {
   password: [
     { required: true, message: '必须输入密码信息~', trigger: 'blur' },
     {
-      pattern: /^[a-z0-9]{3,}$/,
+      pattern: /^[a-zA-Z0-9]{3,}$/,
       message: '必须是3位以上数字或字母组成',
       trigger: 'blur'
     }

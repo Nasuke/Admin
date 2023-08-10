@@ -21,6 +21,7 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()]
     }),
+    // 按需导入组件样式  
     createStyleImportPlugin({
       resolves: [ElementPlusResolve()],
       libs: [
@@ -38,5 +39,16 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    // 跨域处理
+    proxy: {
+      "^/api": {
+        target: "http://139.9.87.234:8000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      }
+    },
+    cors: true
   }
 })

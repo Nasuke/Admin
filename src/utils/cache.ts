@@ -11,7 +11,7 @@ class Cache {
   }
 
   setCache(key: string, value: any) {
-    if (value) {
+    if (value || value === false) {
       this.storage.setItem(key, JSON.stringify(value))
     }
   }

@@ -24,14 +24,19 @@ import { ElMessage } from 'element-plus'
 import type { FormRules, ElForm } from 'element-plus'
 import useLoginStore from '@/store/login/login'
 import type { IAccount } from '@/types'
+import { localCache } from '@/utils/cache'
 
-// 1.定义account数据
+// 定义常量
+const CACHE_NAME = "name"
+const CACHE_PWD = "password"
+
+// 定义account数据
 const account = reactive<IAccount>({
-  name: '',
-  password: ''
+  name: localCache.getCache(CACHE_NAME) ?? "",
+  password: localCache.getCache(CACHE_PWD) ?? ""
 })
 
-// 2.定义校验规则
+// 定义校验规则
 const accountRules: FormRules = {
   name: [
     { required: true, message: '必须输入帐号信息~', trigger: 'blur' },
@@ -51,10 +56,10 @@ const accountRules: FormRules = {
   ]
 }
 
-// 3.执行帐号的登录逻辑
+// 执行帐号的登录逻辑
 const formRef = ref<InstanceType<typeof ElForm>>()
 const loginStore = useLoginStore()
-function loginAction() {
+function loginAction(isRemPwd: boolean) {
   formRef.value?.validate((valid) => {
     if (valid) {
       // 1.获取用户输入的帐号和密码
@@ -62,7 +67,17 @@ function loginAction() {
       const password = account.password
 
       // 2.向服务器发送网络请求(携带账号和密码)
-      loginStore.loginAccountAction({ name, password })
+      loginStore.loginAccountAction({ name, password }).then(res => {
+        // 3. 登录成功决定是否记住状态
+        if (isRemPwd) {
+          localCache.setCache(CACHE_NAME, name)
+          localCache.setCache(CACHE_PWD, password)
+        } else {
+          // 3.1 如果登录了但是选择没有记住 则清空
+          localCache.removeCache(CACHE_NAME)
+          localCache.removeCache(CACHE_PWD)
+        }
+      })
     } else {
       ElMessage.error('Oops, 请您输入正确的格式后再操作~~.')
     }

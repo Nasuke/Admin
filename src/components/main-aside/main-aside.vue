@@ -2,21 +2,14 @@
   <div class="main-menu">
     <div class="logo">
       <img src="@/assets/img/logo.svg" alt="">
-      <h2 class="title">Nasuke</h2>
+      <h2 v-show="!isCol" class="title">Nasuke</h2>
     </div>
     <div class="menu">
-      <el-menu
-      :collapse="isFold"
-      @open="handleOpen"
-        default-active="3"
-        text-color="#b7bdc3"
-        active-text-color="#fff"
-        background-color="#001529"
-        style="height: 100%;"
-      >
+      <el-menu :collapse="isCol" @open="handleOpen" default-active="3" text-color="#b7bdc3" active-text-color="#fff"
+        background-color="#001529" style="height: 100%;">
         <template v-for="(item, index) in userMenu" :key="item.id">
           <!-- 此处index是string类型 需要转换一下 -->
-          <el-sub-menu  :index="item.id + ''" >
+          <el-sub-menu :index="item.id + ''">
             <template #title>
               <el-icon>
                 <!-- 使用动态组件来完成 字符串到组件的映射 -->
@@ -40,16 +33,18 @@
 import { ref } from 'vue';
 import useLoginStore from '@/store/login/login';
 import { localCache } from '@/utils/cache';
-import { USER_MENU } from '../../../global/constants';
 // 使用store
 const loginStore = useLoginStore()
-
 const userMenu = loginStore.userMenu
 const userInfo = loginStore.userInfo
 
-// 菜单折叠状态
-const isFold = ref<boolean>(false)
-
+// 定义属性
+defineProps({
+  isCol: {
+    type: Boolean,
+    default: false
+  }
+})
 // 菜单展开时
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log("---", "菜单发生了open");

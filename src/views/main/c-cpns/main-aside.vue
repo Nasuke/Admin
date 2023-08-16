@@ -19,7 +19,8 @@
           <el-sub-menu  :index="item.id + ''" >
             <template #title>
               <el-icon>
-                <location />
+                <!-- 使用动态组件来完成 字符串到组件的映射 -->
+                <component :is="item.icon?.split('-icon-')[1]" />
               </el-icon>
               <span>{{ item.name }}</span>
             </template>

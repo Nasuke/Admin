@@ -21,7 +21,7 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()]
     }),
-    // 按需导入组件样式  
+    // 按需导入组件样式
     createStyleImportPlugin({
       resolves: [ElementPlusResolve()],
       libs: [
@@ -44,7 +44,7 @@ export default defineConfig({
     // 跨域处理
     proxy: {
       "^/api": {
-        target: "http://139.9.87.234:8000",
+        target: "http://codercba.com:5000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       }

@@ -1,0 +1,106 @@
+<template>
+  <div class="main-menu">
+    <div class="logo">
+      <img src="@/assets/img/logo.svg" alt="">
+      <h2 class="title">Nasuke</h2>
+    </div>
+    <div class="menu">
+      <el-menu
+      :collapse="isFold"
+      @open="handleOpen"
+        default-active="3"
+        text-color="#b7bdc3"
+        active-text-color="#fff"
+        background-color="#001529"
+        style="height: 100%;"
+      >
+        <template v-for="(item, index) in userMenu" :key="item.id">
+          <!-- 此处index是string类型 需要转换一下 -->
+          <el-sub-menu  :index="item.id + ''" >
+            <template #title>
+              <el-icon>
+                <location />
+              </el-icon>
+              <span>{{ item.name }}</span>
+            </template>
+            <el-menu-item-group v-if="item.children && item.children.length > 0">
+              <template v-for="(subItem, idx) in item.children" :key="subItem.id">
+                <el-menu-item :index="subItem.id + ''">{{ subItem.name }}</el-menu-item>
+              </template>
+            </el-menu-item-group>
+          </el-sub-menu>
+        </template>
+      </el-menu>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import useLoginStore from '@/store/login/login';
+import { localCache } from '@/utils/cache';
+import { USER_MENU } from '../../../global/constants';
+// 使用store
+const loginStore = useLoginStore()
+
+const userMenu = loginStore.userMenu
+const userInfo = loginStore.userInfo
+
+// 菜单折叠状态
+const isFold = ref<boolean>(false)
+
+// 菜单展开时
+const handleOpen = (key: string, keyPath: string[]) => {
+  console.log("---", "菜单发生了open");
+}
+
+
+</script>
+
+<style lang="less" scoped>
+.main-menu {
+  height: 100%;
+  background-color: #001529;
+}
+
+.logo {
+  display: flex;
+  height: 28px;
+  padding: 12px 10px 8px 10px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    margin: 0 10px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    white-space: nowrap;
+  }
+}
+
+.el-menu {
+  border-right: none;
+  user-select: none;
+}
+
+.el-sub-menu {
+  .el-menu-item {
+    padding-left: 50px !important;
+    background-color: #0c2135;
+  }
+
+  .el-menu-item:hover {
+    color: #fff;
+  }
+
+  .el-menu-item.is-active {
+    background-color: #0a60bd;
+  }
+}
+</style>

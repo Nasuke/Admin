@@ -28,8 +28,6 @@ const router = createRouter({
 const token = localCache.getCache(LOGIN_TOKEN)
 // 导航守卫
 router.beforeEach((to) => {
-  console.log(to.path, token);
-
   // 如果去首页但没有token 回到登录页
   if (to.path === "/main" && !token) {
     return "/login"

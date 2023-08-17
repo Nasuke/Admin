@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import {  ref } from 'vue';
+import { ref, computed } from 'vue';
 import useLoginStore from '@/store/login/login';
 import { useRoute, useRouter } from 'vue-router';
 import {  mapPathToMenu } from '../../utils/map-menu';
@@ -41,8 +41,10 @@ const userMenu = loginStore.userMenu
 // 菜单显示的默认值
 const router = useRouter()
 const route = useRoute()
-const pathMenu = mapPathToMenu(route.path, userMenu)
-const defaultActive = ref(pathMenu.id + '')
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenu(route.path, userMenu)
+  return pathMenu.id + ''
+})
 
 
 // 定义属性

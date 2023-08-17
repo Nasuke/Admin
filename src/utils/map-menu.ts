@@ -38,7 +38,14 @@ export function mapMenuToRoutes(userMenu:any[]) {
     for (const subMenu of menu.children) {
       const route = localRoutes.find(item => item.path === subMenu.url)
       // 类型缩小
-      if (route) routes.push(route)
+      if (route) {
+        // 顶层菜单添加重定向(每个菜单只有一次)
+        if (!routes.find(item => item.path === menu.url)) {
+          routes.push({path: menu.url, redirect: route.path})
+        }
+        // 二级菜单对应路由
+        routes.push(route)
+      }
       // 找到并导出第一个子路由
       if (route && !firstShow) {
         firstShow = subMenu
@@ -62,4 +69,27 @@ export function mapPathToMenu(path: string, userMenu: any[]) {
       }
     }
   }
+}
+
+
+interface ICrumb {
+  name: string,
+  path?: string
+}
+/**
+ * 根据路径展示面包屑
+ * @param {string} path 当前路径
+ * @param {any[]} userMenu 所有菜单
+ */
+export function mapPathToCrumb(path:string, userMenu: any[]) {
+  const crumbInfos: ICrumb[] = []
+  for (const item of userMenu) {
+    for (const subItem of item.children) {
+      if (subItem.url === path) {
+        crumbInfos.push({name: item.name, path: item.url})
+        crumbInfos.push({name: subItem.name, path: subItem.url})
+      }
+    }
+  }
+  return crumbInfos
 }

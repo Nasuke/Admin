@@ -7,7 +7,7 @@
       </el-icon>
     </div>
     <div class="content">
-      <div class="breadcrumb">面包屑</div>
+      <header-crumb></header-crumb>
       <header-info></header-info>
     </div>
   </div>

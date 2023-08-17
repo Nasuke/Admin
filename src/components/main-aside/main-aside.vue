@@ -31,12 +31,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import useLoginStore from '@/store/login/login';
 import { localCache } from '@/utils/cache';
+import useLoginStore from '@/store/login/login';
+import { useRouter } from 'vue-router';
 // 使用store
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
 const userInfo = loginStore.userInfo
+
+// 路由对象
+const router = useRouter()
 
 // 定义属性
 defineProps({
@@ -53,6 +57,7 @@ const handleOpen = (key: string, keyPath: string[]) => {
 
 const handleChange = (item: any) => {
   console.log("---", item.url);
+  router.push(item.url)
 }
 
 

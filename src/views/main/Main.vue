@@ -8,7 +8,9 @@
         <el-header height="50px">
           <MainHeader @trigger="handleFold"/>
         </el-header>
-        <el-main class="main">Main</el-main>
+        <el-main class="main">
+          <RouterView />
+        </el-main>
       </el-container>
     </el-container>
   </div>

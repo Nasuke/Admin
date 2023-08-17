@@ -4,6 +4,7 @@ import type { IAccount } from '@/types'
 import { localCache } from '@/utils/cache'
 import { LOGIN_TOKEN, USER_INFO, USER_MENU } from '@/global/constants'
 import router from '@/router'
+import { mapMenuToRoutes } from '@/utils/map-menu'
 
 interface ILoginState {
   token: string,
@@ -39,6 +40,10 @@ const useLoginStore = defineStore('login', {
       localCache.setCache(USER_MENU, this.userMenu)
       localCache.setCache(USER_INFO, this.userInfo)
 
+
+      // 动态匹配路由
+      const dynamicRoutes = mapMenuToRoutes(this.userMenu)
+      dynamicRoutes.map(item => router.addRoute("main", item))
 
 
       // 5. 跳转到首页

@@ -19,7 +19,7 @@
             </template>
             <el-menu-item-group v-if="item.children && item.children.length > 0">
               <template v-for="(subItem, idx) in item.children" :key="subItem.id">
-                <el-menu-item :index="subItem.id + ''">{{ subItem.name }}</el-menu-item>
+                <el-menu-item :index="subItem.id + ''" @click="handleChange(subItem)">{{ subItem.name }}</el-menu-item>
               </template>
             </el-menu-item-group>
           </el-sub-menu>
@@ -48,6 +48,11 @@ defineProps({
 // 菜单展开时
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log("---", "菜单发生了open");
+}
+
+
+const handleChange = (item: any) => {
+  console.log("---", item.url);
 }
 
 

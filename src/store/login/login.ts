@@ -14,16 +14,15 @@ interface ILoginState {
 
 const useLoginStore = defineStore('login', {
   state: ():ILoginState => ({
-    token: localCache.getCache(LOGIN_TOKEN) ?? '',
-    userInfo: localCache.getCache(USER_INFO) ?? {},
-    userMenu: localCache.getCache(USER_MENU) ?? []
+    token: '',
+    userInfo: {},
+    userMenu: []
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
       // 1. 账号登录, 获取token等信息
       const loginResult = await accountLoginRequest(account)
       const id = loginResult.data.id
-      // this.name = loginResult.data.name
       this.token = loginResult.data.token
 
       // 2. 本地缓存token 之后在请求的拦截器中带上
@@ -43,11 +42,25 @@ const useLoginStore = defineStore('login', {
 
       // 动态匹配路由
       const dynamicRoutes = mapMenuToRoutes(this.userMenu)
+      // 此种方式需要有 name: main 不然不会成为子路由
       dynamicRoutes.map(item => router.addRoute("main", item))
 
 
       // 5. 跳转到首页
       router.push("/main")
+    },
+    async loadLocalData() {
+      const token = localCache.getCache(LOGIN_TOKEN)
+      const userInfo = localCache.getCache(USER_INFO)
+      const userMenu = localCache.getCache(USER_MENU)
+      if (token && userInfo && userMenu) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenu = userMenu
+        // refresh后再次注册路由
+        const dynamicRoutes = mapMenuToRoutes(userMenu)
+        dynamicRoutes.forEach(route => router.addRoute('main', route))
+      }
     }
   }
 })

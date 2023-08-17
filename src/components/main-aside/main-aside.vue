@@ -5,7 +5,7 @@
       <h2 v-show="!isCol" class="title">Nasuke</h2>
     </div>
     <div class="menu">
-      <el-menu :collapse="isCol" @open="handleOpen" default-active="3" text-color="#b7bdc3" active-text-color="#fff"
+      <el-menu :collapse="isCol" @open="handleOpen" :default-active="defaultActive" text-color="#b7bdc3" active-text-color="#fff"
         background-color="#001529" style="height: 100%;">
         <template v-for="(item, index) in userMenu" :key="item.id">
           <!-- 此处index是string类型 需要转换一下 -->
@@ -30,17 +30,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { localCache } from '@/utils/cache';
+import {  ref } from 'vue';
 import useLoginStore from '@/store/login/login';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import {  mapPathToMenu } from '../../utils/map-menu';
 // 使用store
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
-const userInfo = loginStore.userInfo
 
-// 路由对象
+// 菜单显示的默认值
 const router = useRouter()
+const route = useRoute()
+const pathMenu = mapPathToMenu(route.path, userMenu)
+const defaultActive = ref(pathMenu.id + '')
+
 
 // 定义属性
 defineProps({
@@ -49,6 +52,9 @@ defineProps({
     default: false
   }
 })
+
+
+
 // 菜单展开时
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log("---", "菜单发生了open");

@@ -20,6 +20,7 @@ function loadLocalRouteObj() {
   return localRoutes
 }
 
+export let firstShow:any = null
 
 
 /**
@@ -30,18 +31,35 @@ function loadLocalRouteObj() {
 *  3. 将两者进行匹配
 */
 export function mapMenuToRoutes(userMenu:any[]) {
-
   const localRoutes = loadLocalRouteObj()
   const routes:RouteRecordRaw[] = []
   // 完成匹配
   for (const menu of userMenu) {
     for (const subMenu of menu.children) {
       const route = localRoutes.find(item => item.path === subMenu.url)
-      console.log(route, "xxxx");
-
       // 类型缩小
       if (route) routes.push(route)
+      // 找到并导出第一个子路由
+      if (route && !firstShow) {
+        firstShow = subMenu
+      }
     }
   }
   return routes
+}
+
+
+/**
+ * 根据路径去匹配当前菜单
+ * @param {string} path 当前路径
+ * @param {any[]} userMenu 所有菜单
+ */
+export function mapPathToMenu(path: string, userMenu: any[]) {
+  for (const item of userMenu) {
+    for (const subItem of item.children) {
+      if (subItem.url === path) {
+        return subItem
+      }
+    }
+  }
 }

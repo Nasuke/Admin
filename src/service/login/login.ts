@@ -1,7 +1,5 @@
-import { localCache } from '@/utils/cache'
 import hyRequest from '..'
 import type { IAccount } from '@/types'
-import { LOGIN_TOKEN } from '@/global/constants'
 
 export function accountLoginRequest(account: IAccount) {
   return hyRequest.post({
